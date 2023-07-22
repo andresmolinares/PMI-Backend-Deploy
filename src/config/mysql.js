@@ -8,6 +8,11 @@ const port = process.env.MYSQL_PORT;
 
 const sequelize = new Sequelize(database, username, password, {
     host, dialect: 'mysql', port: port,
+    dialectOptions: {
+        ssl: {
+            rejectUnauthorized: true,        
+        }
+    }   
 });
 
 const dbConnectMySQL = async () => {
