@@ -1,27 +1,31 @@
 import express from 'express';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
 const router = express.Router();
 
-//obtener la ruta del directorio actual
-const { pathname: root } = new URL('./', import.meta.url);
+// Get the current file path and directory path
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-//limpiar la ruta del directorio actual
-const PATH_ROUTES = (root.replace(/%20/g, ' ').replace(/\//g, '\\')).substring(1, root.length - 1);
+// Define the path to the routes directory
+const PATH_ROUTES = join(__dirname);
 
-//eliminar la extension del archivo
+// Remove the extension from the file name
 const removeExtension = (fileName) => {
     return fileName.split('.').shift();
 };
 
-//obtener todos los archivos de la carpeta routes
+// Get all files from the routes directory
 const files = fs.readdirSync(PATH_ROUTES).filter((file) => {
-    return file != 'index.js';
+    return file !== 'index.js';
 });
 
-//importar de manera dinamica todas las rutas
+// Dynamically import each file as a route module and register it with the Express router
 for (let file of files) {
-    router.use(`/${removeExtension(file)}`, (await import(`./${file}`)).default);
+    const routeModule = await import(join(PATH_ROUTES, file));
+    router.use(`/${removeExtension(file)}`, routeModule.default);
 }
 
 export default router;
