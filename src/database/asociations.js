@@ -10,6 +10,8 @@ import ParameterType from '../models/parameterTypes.js';
 import PsychologicalProcess from '../models/psychologicalProcesses.js';
 import PsychologicalTask from '../models/psychologicalTasks.js';
 import PsychologicalTest from '../models/psychologicalTests.js';
+import Mri from '../models/mri.js';
+import BrainStructure from '../models/brainStructure.js';
 
 //usuarios y pacientes (1:M)
 Patient.belongsTo(User, {
@@ -129,6 +131,56 @@ PsychologicalTask.belongsToMany(Patient, {
     otherKey: 'patients_id'
 });
 
+//pacientes y mri (1:1) 
+Patient.hasMany(Mri, {
+    foreignKey: 'patients_id'
+});
+
+Mri.belongsTo(Patient, {
+    foreignKey: 'patients_id'
+});
+
+//mri y estructura cerebral (pruebas mri) (M:M)
+const BrainStructureMri = sequelize.define('brain_structure_mri', {
+    mri_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Mri,
+            key: 'id'
+        }
+    },
+    brain_structure_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: BrainStructure,
+            key: 'id'
+        }
+    },
+    volume_mm3: {
+        type: DataTypes.FLOAT,
+        allowNull: false
+    },
+}, 
+{
+    tableName: 'brain_structure_mri',
+    timestamps: false
+});
+
+Mri.belongsToMany(BrainStructure, {
+    through: 'brain_structure_mri',
+    foreignKey: 'mri_id',
+    otherKey: 'brain_structure_id'
+});
+
+BrainStructure.belongsToMany(Mri, {
+    through: 'brain_structure_mri',
+    foreignKey: 'brain_structure_id',
+    otherKey: 'mri_id'
+});
+
 export {
-    PatientPsychologicalTask
+    PatientPsychologicalTask,
+    BrainStructureMri
 }

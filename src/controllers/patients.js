@@ -7,7 +7,9 @@ import SupplementalData from '../models/supplementalData.js';
 import LawViolation from '../models/lawViolation.js';
 import Parameter from '../models/parameters.js';
 import PsychologicalTask from '../models/psychologicalTasks.js';
-import { PatientPsychologicalTask } from '../database/asociations.js';
+import { BrainStructureMri, PatientPsychologicalTask } from '../database/asociations.js';
+import Mri from '../models/mri.js';
+import BrainStructure from '../models/brainStructure.js';
 
 const getItems = async (req, res) => {
     try {
@@ -23,7 +25,7 @@ const createItem = async (req, res) => {
     try {
         req = matchedData(req);
 
-        const patient = await Patient.findOne({ where: { code: req.code } });
+        const patient = await Patient.findOne({ where: { id: req.id } });
         if (patient !== null) {
             handleHttpError(res, 'EL CODIGO YA EXISTE', 403);
             return;
@@ -44,7 +46,7 @@ const updateItem = async (req, res) => {
         const patient = await Patient.findOne({
             where: {
                 [Op.and]: [
-                    { code: req.code },
+                    { id: req.id },
                     { id: { [Op.ne]: req.id } }
                 ]
             }
@@ -263,6 +265,31 @@ const getPatientPsychologicalResults = async (req, res) => {
     }
 }
 
+//MRI del paciente
+const getMriTests = async (req, res) => {
+    try {
+        req = matchedData(req);
+
+        const data = await Patient.findByPk(req.id, {
+            include: {
+                model: Mri,
+                include: [
+                    {
+                        model: BrainStructure,
+                        through: {
+                            model: BrainStructureMri
+                        }
+                    }
+                ] 
+            }
+        });
+
+        res.status(200).send({ data });
+    } catch (error) {
+        handleHttpError(res, 'ERROR AL OBTENER PRUEBAS MRI', 403);
+    }
+}
+
 
 export {
     createItem,
@@ -277,5 +304,6 @@ export {
     createLawViolation,
     updateLawViolation,
     getPsychologicalResults,
-    getPatientPsychologicalResults
+    getPatientPsychologicalResults,
+    getMriTests
 }

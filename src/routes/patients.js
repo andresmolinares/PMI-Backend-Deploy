@@ -15,7 +15,8 @@ import {
     createLawViolation,
     updateLawViolation,
     getPsychologicalResults,
-    getPatientPsychologicalResults
+    getPatientPsychologicalResults,
+    getMriTests
 } from '../controllers/patients.js';
 
 import { 
@@ -58,5 +59,8 @@ router.put("/:id/law_violation", authMiddleware, checkRol(['administrador']), va
 router.get("/:id/psychological_results", authMiddleware, checkRol(['administrador']), validatorGetItem, getPsychologicalResults);
 
 router.get("/:id/psychological_tasks/psychological_results", authMiddleware, checkRol(['administrador']), validatorGetItem, getPatientPsychologicalResults);
+
+//MRI del paciente
+router.get("/:id/mri_tests", authMiddleware, checkRol(['administrador']), validatorGetItem, getMriTests);
 
 export default router;

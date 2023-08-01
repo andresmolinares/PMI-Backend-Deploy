@@ -2,7 +2,7 @@ import { check } from 'express-validator';
 import validateResults from '../utils/handleValidator.js';
 
 const validatorCreateItem = [
-    check('code').exists().notEmpty().isLength({ min: 1, max: 20 }),
+    check('id').exists().notEmpty().isLength({ min: 1, max: 20 }),
     check('subject').exists().notEmpty().isBoolean(),
     check('group').exists().notEmpty(),
     check('gender').exists().notEmpty().isIn(['m', 'f']),
@@ -38,7 +38,7 @@ const validatorGetItem = [
 ];
 
 const validatorUpdateItem = [
-    check('code').exists().notEmpty().isLength({ min: 1, max: 20 }),
+    check('id').exists().notEmpty().isLength({ min: 1, max: 20 }),
     check('subject').exists().notEmpty().isBoolean(),
     check('gender').exists().notEmpty().isIn(['m', 'f']),
     check('orthodontic_appliance').isInt().optional({ nullable: true }),
