@@ -80,6 +80,9 @@ const validatorUpdateItem = [
         ].includes(value);
     }),
     check('socioeconomic_status').exists().notEmpty().isInt(),
+    check('leave_school').exists().notEmpty().isBoolean(),
+    check('domestic_violence').exists().notEmpty().isBoolean(),
+    check('displaced_by_violence').exists().notEmpty().isBoolean(),
     check('users_id').exists().notEmpty().isInt({ min: 1 }),
     check('institutions_id').isInt({ min: 1 }).optional({ nullable: true }),
     (req, res, next) => {
@@ -100,6 +103,7 @@ const validatorCreateSupplData = [
     check('drink_alcohol').exists().notEmpty().isBoolean(),
     check('weed').exists().notEmpty().isBoolean(),
     check('cocaine').exists().notEmpty().isBoolean(),
+    check('age_first_consumption').exists().notEmpty().isBoolean(),
     check('patients_id').exists().notEmpty().isInt({ min: 1 }),
 ];
 
@@ -116,6 +120,7 @@ const validatorUpdateSupplementalData = [
     check('drink_alcohol').exists().notEmpty().isBoolean(),
     check('weed').exists().notEmpty().isBoolean(),
     check('cocaine').exists().notEmpty().isBoolean(),
+    check('age_first_consumption').exists().notEmpty().isBoolean(),
     check('patients_id').exists().notEmpty().isInt({ min: 1 }),
 ];
 

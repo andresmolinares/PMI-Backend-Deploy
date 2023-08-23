@@ -53,6 +53,10 @@ const SupplementalData = sequelize.define('supplemental_data', {
         type: DataTypes.TINYINT,
         allowNull: false,
     },
+    age_first_consumption: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    }
 },
 {
     timestamps: false

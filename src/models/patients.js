@@ -92,6 +92,18 @@ const Patient = sequelize.define('patients', {
     institutions_id: {
         type: DataTypes.INTEGER,
         allowNull: true,
+    },
+    leave_school: {
+        type: DataTypes.TINYINT,
+        allowNull: false,
+    },
+    domestic_violence: {
+        type: DataTypes.TINYINT,
+        allowNull: false
+    },
+    displaced_by_violence: {
+        type: DataTypes.TINYINT,
+        allowNull: false
     }
 }, {
     paranoid: true,
