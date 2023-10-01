@@ -49,7 +49,8 @@ const getReportTest = async (req, res) => {
         let data = {
             test_average: Math.round((sum / scores.length) * 100) / 100,
             min_score: Math.round((Math.min(...scores)) * 100) / 100,
-            max_score: Math.round((Math.max(...scores)) * 100) / 100
+            max_score: Math.round((Math.max(...scores)) * 100) / 100,
+            scores_test: scores,
         }
 
         res.status(200).send({ data });
